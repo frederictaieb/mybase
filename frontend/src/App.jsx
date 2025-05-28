@@ -7,9 +7,30 @@ function App() {
   const root = useRef(null);
   const scope = useRef(null);
   const [ rotations, setRotations ] = useState(0);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-  
+    const fetchItems = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:8000/items/');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setItems(data);
+      } catch (e) {
+        console.error('Erreur lors de la récupération des items:', e);
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchItems();
+
     scope.current = createScope({ root }).add( self => {
     
       // Every anime.js instances declared here are now scopped to <div ref={root}>
@@ -56,7 +77,30 @@ function App() {
   };
 
   return (
-    <div ref={root}>
+    <div ref={root} className="container">
+      <h1>Liste des Items</h1>
+      
+      {loading && <p>Chargement en cours...</p>}
+      
+      {error && <p className="error">Erreur: {error}</p>}
+      
+      {!loading && !error && (
+        <div className="items-container">
+          {items.length === 0 ? (
+            <p>Aucun item trouvé</p>
+          ) : (
+            <ul className="items-list">
+              {items.map(item => (
+                <li key={item.id} className="item-card">
+                  <h3>{item.name}</h3>
+                  <p>ID: {item.id}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
       <div className="large centered row">
         <img src={reactLogo} className="logo react" alt="React logo" />
       </div>

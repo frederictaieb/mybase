@@ -40,3 +40,40 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Styles pour la liste des items */
+.items-container {
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.items-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.item-card {
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: border-color 0.25s;
+  border: 1px solid transparent;
+}
+
+.item-card:hover {
+  border-color: #646cff;
+}
+
+.item-card h3 {
+  margin-top: 0;
+  color: #ffffff;
+}
+
+.error {
+  color: #ff6464;
+  font-weight: bold;
+}
